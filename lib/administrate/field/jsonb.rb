@@ -14,7 +14,15 @@ module Administrate
 
         result = data
         options[:transform].each do |method|
-          result = result.is_a?(Array) ? result.map(&method) : result.public_send(method)
+          result = if method == :parse_json
+                     JSON.parse(result) rescue result
+                   elsif result.is_a?(Array)
+                     result.map(&method)
+                   elsif method.is_a?(Proc)
+                     method.call(result)
+                   else
+                     result.public_send(method)
+                   end
         end
         result
       end

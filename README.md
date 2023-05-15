@@ -47,6 +47,28 @@ ATTRIBUTE_TYPES = {
 }.freeze
 ```
 
+It also supports Proc.
+
+```ruby
+ATTRIBUTE_TYPES = {
+  # ...
+  details: Field::JSONB.with_options(
+    transform: [:transformation, Proc.new { |item| item.merge({ foo: 'bar' }) }]
+  )
+}.freeze
+```
+
+And there is a built in `parse_json` option, it will call `JSON.parse(your_object)` on your object.
+
+```ruby
+ATTRIBUTE_TYPES = {
+  # ...
+  details: Field::JSONB.with_options(
+    transform: [:parse_json, :some_other_stuff]
+  )
+}.freeze
+```
+
 If you want to edit json displaying on `show` page, you can use `advanced_view` option (both JSON and arrays are supported).
 
 ```ruby
@@ -151,7 +173,7 @@ languages: Field::JSONB.with_options(advanced_view: {
 
 ## License
 
-Copyright © 2015-2019 Codica. It is released under the [MIT License](https://opensource.org/licenses/MIT).
+Copyright © 2015-2022 Codica. It is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## About Codica
 
